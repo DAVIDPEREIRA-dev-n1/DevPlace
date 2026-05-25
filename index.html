@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="pt" id="htmlElement">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevPlace - Plataforma de Desenvolvedores</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="logo.ico" type="image/x-icon">
+    
+</head>
+<body>
+    <!-- Página de Login -->
+    <div id="loginPage" class="page active">
+        <div class="login-container">
+            <h1>DevPlace</h1>
+            <form id="loginForm">
+                <input type="email" id="loginEmail" placeholder="Email" required>
+                <input type="password" id="loginPassword" placeholder="Senha" required>
+                <button type="submit" class="btn-login">Entrar</button>
+            </form>
+            <p>Não tem conta? <a href="#" onclick="togglePages()">Criar conta</a></p>
+        </div>
+    </div>
+
+    <!-- Página de Registro -->
+    <div id="registerPage" class="page">
+        <div class="register-container">
+            <h1>DevPlace</h1>
+            <form id="registerForm">
+                <input type="text" id="registerName" placeholder="Nome completo" required>
+                <input type="email" id="registerEmail" placeholder="Email" required>
+                <input type="password" id="registerPassword" placeholder="Senha" required>
+                <input type="password" id="registerConfirm" placeholder="Confirmar senha" required>
+                <button type="submit" class="btn-login">Criar Conta</button>
+            </form>
+            <p>Já tem conta? <a href="#" onclick="togglePages()">Fazer login</a></p>
+        </div>
+    </div>
+
+    <!-- Hub Principal (Feed) -->
+    <div id="feedPage" class="page">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>DevPlace</h2>
+                <button class="theme-toggle" onclick="toggleTheme()" title="Mudar tema">🌙</button>
+            </div>
+            <div class="user-info" onclick="toggleAccountMenu()" style="cursor: pointer;">
+                <div class="user-avatar" id="userAvatarDisplay">👤</div>
+                <div class="user-details">
+                    <p id="userName">Utilizador</p>
+                    <small id="userEmail">@usuario</small>
+                </div>
+                <div class="dropdown-arrow">⋮</div>
+            </div>
+            
+            <!-- Menu Dropdown de Conta -->
+            <div id="accountMenu" class="account-menu">
+                <a href="#" onclick="openSettingsModal()">⚙️ Configurações</a>
+                <a href="#" onclick="openEditProfileModal()">✏️ Editar Perfil</a>
+                <a href="#" onclick="logout()">🚪 Sair</a>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active">📰 Feed</a>
+                <a href="#" class="nav-item">❤️ Favoritos</a>
+                <a href="#" class="nav-item">👤 Perfil</a>
+                <a href="#" class="nav-item" onclick="logout()">🚪 Sair</a>
+            </nav>
+        </aside>
+
+        <!-- Feed Principal -->
+        <main class="feed-container">
+            <!-- Criar Post -->
+            <section class="create-post">
+                <div class="post-header">
+                    <div class="post-avatar" id="createPostAvatar">👤</div>
+                    <input type="text" id="postText" placeholder="O que está pensando?" class="post-input">
+                </div>
+                <div class="post-actions">
+                    <button class="action-btn" onclick="openFileInput('image')">🖼️ Foto</button>
+                    <button class="action-btn" onclick="openFileInput('video')">🎥 Vídeo</button>
+                    <button class="btn-publish" onclick="createPost()">Publicar</button>
+                </div>
+                <input type="file" id="imageInput" accept="image/*" style="display:none;">
+                <input type="file" id="videoInput" accept="video/*" style="display:none;">
+            </section>
+
+            <!-- Feed de Posts -->
+            <div id="postsContainer" class="posts-container">
+                <!-- Posts serão adicionados aqui pelo JavaScript -->
+            </div>
+        </main>
+
+        <!-- Sidebar Direita (Trending) -->
+        <aside class="sidebar-right">
+            <div class="trending">
+                <h3>Tendências</h3>
+                <div class="trend-item">
+                    <span>#Tecnologia</span>
+                    <small>1.2K posts</small>
+                </div>
+                <div class="trend-item">
+                    <span>#Design</span>
+                    <small>856 posts</small>
+                </div>
+                <div class="trend-item">
+                    <span>#Programação</span>
+                    <small>2.5K posts</small>
+                </div>
+                <div class="trend-item">
+                    <span>#Web</span>
+                    <small>1.8K posts</small>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Modal de Editar Perfil -->
+    <div id="editProfileModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Editar Perfil</h2>
+                <button class="modal-close" onclick="closeEditProfileModal()">✕</button>
+            </div>
+            <form id="editProfileForm" onsubmit="saveProfileChanges(event)">
+                <div class="form-group">
+                    <label>Avatar:</label>
+                    <div class="avatar-picker">
+                        <div class="current-avatar" id="currentAvatar">👤</div>
+                        <div class="avatar-options">
+                            <span onclick="changeAvatar('👨')">👨</span>
+                            <span onclick="changeAvatar('👩')">👩</span>
+                            <span onclick="changeAvatar('🧑')">🧑</span>
+                            <span onclick="changeAvatar('😊')">😊</span>
+                            <span onclick="changeAvatar('😎')">😎</span>
+                            <span onclick="changeAvatar('🤓')">🤓</span>
+                        </div>
+                    </div>
+                    <input type="hidden" id="newAvatar">
+                </div>
+                <div class="form-group">
+                    <label for="editName">Nome:</label>
+                    <input type="text" id="editName" required>
+                </div>
+                <div class="form-group">
+                    <label for="editBio">Bio:</label>
+                    <textarea id="editBio" placeholder="Descreva-se..." rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="editLocation">Localização:</label>
+                    <input type="text" id="editLocation" placeholder="Cidade/País">
+                </div>
+                <button type="submit" class="btn-save">Guardar Alterações</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Configurações -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Configurações</h2>
+                <button class="modal-close" onclick="closeSettingsModal()">✕</button>
+            </div>
+            <div class="settings-options">
+                <div class="settings-section">
+                    <h3>Privacidade</h3>
+                    <div class="setting-item">
+                        <label>
+                            <input type="checkbox" id="privateAccount"> Conta Privada
+                        </label>
+                        <small>Só seguidores aprovados podem ver seus posts</small>
+                    </div>
+                    <div class="setting-item">
+                        <label>
+                            <input type="checkbox" id="allowComments" checked> Permitir Comentários
+                        </label>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Notificações</h3>
+                    <div class="setting-item">
+                        <label>
+                            <input type="checkbox" id="notifLikes" checked> Notificar Likes
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <label>
+                            <input type="checkbox" id="notifComments" checked> Notificar Comentários
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <label>
+                            <input type="checkbox" id="notifFollows" checked> Notificar Novos Seguidores
+                        </label>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Segurança</h3>
+                    <button class="btn-settings" onclick="openChangePasswordModal()">🔐 Mudar Senha</button>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Conta</h3>
+                    <button class="btn-settings btn-danger" onclick="deleteAccount()">🗑️ Eliminar Conta</button>
+                </div>
+
+                <button class="btn-save" onclick="saveSettings()">Guardar Configurações</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Mudar Senha -->
+    <div id="changePasswordModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Mudar Senha</h2>
+                <button class="modal-close" onclick="closeChangePasswordModal()">✕</button>
+            </div>
+            <form id="changePasswordForm" onsubmit="saveNewPassword(event)">
+                <div class="form-group">
+                    <label for="currentPassword">Senha Atual:</label>
+                    <input type="password" id="currentPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="newPassword">Nova Senha:</label>
+                    <input type="password" id="newPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirmNewPassword">Confirmar Senha:</label>
+                    <input type="password" id="confirmNewPassword" required>
+                </div>
+                <button type="submit" class="btn-save">Guardar Senha</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
