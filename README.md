@@ -149,3 +149,4 @@ O DevPlace está atualmente numa fase inicial de desenvolvimento. A versão pres
 ## 📄 Licença
 
 Este projeto ainda não possui uma licença definida.
+Agradecimentos David M Pereira
