@@ -1,4 +1,4 @@
-DevPlace
+# DevPlace
 
 A social hub for developers.
 
@@ -6,7 +6,7 @@ A social hub for developers.
 
 DevPlace é uma plataforma social criada para developers, com o objetivo de juntar programadores, projetos e conteúdo tecnológico num único espaço.
 
-A plataforma permite criar perfis, publicar conteúdo, interagir com outras publicações e personalizar a experiência através de uma interface pensada especificamente para a comunidade de desenvolvimento.
+A plataforma permite criar contas, iniciar sessão, criar perfis, publicar conteúdo e interagir com outras publicações, através de uma interface pensada especificamente para a comunidade de desenvolvimento.
 
 🚧 Project Status: Early Development / Prototype
 
@@ -16,140 +16,330 @@ O DevPlace nasceu da ideia de criar uma rede social focada especificamente na co
 
 Em vez de ser uma rede social genérica, o objetivo é construir um espaço onde o conteúdo, as interações e as funcionalidades sejam pensados tendo developers como público principal.
 
-Atualmente, o projeto encontra-se numa fase inicial de protótipo/frontend.
+O projeto começou como um protótipo frontend utilizando LocalStorage e está atualmente a evoluir para uma arquitetura com backend, API e base de dados.
 
 ## ✨ Funcionalidades
 
 ### 👤 Contas
 
-* Registo de novos utilizadores
-* Login e logout
-* Persistência da sessão
-* Perfil de utilizador
-* Edição do perfil
-* Avatar
-* Localização e biografia
-* Definições da conta
+- Registo de novos utilizadores
+- Login e logout
+- Persistência da sessão
+- Perfil de utilizador
+- Edição do perfil
+- Avatar
+- Localização e biografia
+- Definições da conta
+- Eliminação de conta
+
+### 🔐 Autenticação
+
+- Registo através de API
+- Login através de API
+- Ligação à base de dados
+- Password hashing
+- Verificação segura de passwords
+- Utilização de PHP e PDO
 
 ### 📰 Feed
 
-* Criação de publicações
-* Publicações apenas com texto
-* Upload de imagens
-* Upload de vídeos
-* Feed ordenado pelas publicações mais recentes
-* Contador de likes
-* Contador de comentários
-* Contador de partilhas
-* Eliminação das próprias publicações
-* Indicador de tempo relativo da publicação
+- Criação de publicações
+- Publicações apenas com texto
+- Upload de imagens
+- Upload de vídeos
+- Feed ordenado pelas publicações mais recentes
+- Contador de likes
+- Contador de comentários
+- Contador de partilhas
+- Eliminação das próprias publicações
+- Indicador de tempo relativo da publicação
 
 ### 🎨 Interface
 
-* Interface responsiva
-* Tema claro
-* Tema escuro
-* Sidebar de navegação
-* Secção de tendências
-* Interface inspirada em redes sociais modernas
+- Interface responsiva
+- Tema claro
+- Tema escuro
+- Sidebar de navegação
+- Secção de tendências
+- Interface inspirada em redes sociais modernas
 
 ## 🛠️ Tecnologias
 
-Atualmente, o projeto é construído com tecnologias web nativas:
+Atualmente, o projeto utiliza tecnologias web nativas e uma stack backend em desenvolvimento:
 
-* **HTML5** — estrutura da aplicação
-* **CSS3** — interface e design
-* **JavaScript** — lógica e funcionalidades
-* **LocalStorage** — persistência local de utilizadores, sessão e publicações
-
-Não são necessárias bibliotecas ou frameworks externas para executar o protótipo atual.
+- **HTML5** — estrutura da aplicação
+- **CSS3** — interface e design
+- **JavaScript** — lógica e funcionalidades
+- **PHP** — backend e API
+- **MariaDB** — base de dados
+- **PDO** — comunicação com a base de dados
+- **Apache** — servidor web
+- **XAMPP** — ambiente de desenvolvimento local
+- **phpMyAdmin** — gestão da base de dados
+- **Git & GitHub** — controlo de versões
 
 ## 📁 Estrutura
 
-```text
+text
 DevPlace/
-├── index.html      # Estrutura da aplicação
-├── style.css       # Estilos e interface
-├── script.js       # Lógica da aplicação
-├── logo.ico        # Ícone do projeto
-└── README.md       # Documentação
-```
+├── index.html
+├── style.css
+├── script.js
+├── logo.ico
+├── README.md
+│
+└── api/
+    ├── db.php
+    ├── register.php
+    └── login.php
 
-## ▶️ Executar localmente
+    ▶️ Executar localmente
 
-Como o projeto utiliza apenas HTML, CSS e JavaScript, pode ser executado localmente sem uma instalação complexa.
+O projeto utiliza atualmente PHP, Apache e MariaDB para as funcionalidades de backend.
 
-### 1. Clonar o repositório
-
-```bash
+1. Clonar o repositório
 git clone <repository-url>
 cd DevPlace
-```
+2. Colocar o projeto no XAMPP
 
-### 2. Abrir a aplicação
+Coloca a pasta DevPlace dentro de:
 
-Abre o `index.html` num browser.
+C:\xampp\htdocs\
+3. Iniciar o XAMPP
 
-Também podes utilizar uma extensão como **Live Server** no VS Code para executar o projeto localmente.
+Inicia os serviços:
 
-## 💾 Persistência de dados
+Apache
+MySQL
+4. Criar a base de dados
 
-Nesta versão, os dados são armazenados no `localStorage` do browser.
+Cria uma base de dados chamada:
 
-Isto inclui:
+devplace
 
-* utilizadores;
-* sessão atual;
-* publicações;
-* tema escolhido;
-* informações de perfil.
+e configura a tabela users.
 
-Consequentemente, esta versão ainda não possui um backend ou uma base de dados centralizada.
+5. Abrir a aplicação
+http://localhost/DevPlace/
+💾 Persistência de dados
 
-## 🧭 Roadmap
+O projeto começou utilizando localStorage para armazenar os dados localmente no browser.
+
+Atualmente, o sistema de contas já utiliza uma base de dados MariaDB através de uma API PHP.
+
+O registo e o login são processados pelo backend e os dados dos utilizadores são armazenados na base de dados.
+
+A migração das restantes funcionalidades para o backend será feita progressivamente.
+
+🔐 Segurança
+
+As passwords dos utilizadores não são armazenadas diretamente.
+
+Durante o registo, as passwords são protegidas através de hashing utilizando:
+
+password_hash()
+
+Durante o login, a password é validada através de:
+
+password_verify()
+
+A comunicação com a base de dados utiliza PDO e prepared statements.
+
+O sistema de autenticação ainda se encontra em desenvolvimento e serão adicionadas mais medidas de segurança antes de uma possível utilização em produção.
+
+🧭 Roadmap
 
 O objetivo é evoluir progressivamente o DevPlace de um protótipo frontend para uma plataforma social completa.
 
-Possíveis próximos passos:
-
-* [ ] Backend
-* [ ] Base de dados
-* [ ] API REST
-* [ ] Autenticação segura
-* [ ] Password hashing
-* [ ] Sistema real de comentários
-* [ ] Sistema de likes por utilizador
-* [ ] Sistema de seguidores
-* [ ] Perfis públicos
-* [ ] Pesquisa de developers
-* [ ] Projetos e portefólios
-* [ ] Comunidades
-* [ ] Notificações
-* [ ] Mensagens privadas
-* [ ] Sistema de hashtags
-* [ ] Feed personalizado
-* [ ] Deploy online
-
-## 🎯 Visão
+Backend
+Base de dados
+API REST
+Autenticação segura
+Sistema de sessões
+Sistema real de comentários
+Sistema de likes por utilizador
+Sistema de seguidores
+Perfis públicos
+Pesquisa de developers
+Projetos e portefólios
+Comunidades
+Notificações
+Mensagens privadas
+Sistema de hashtags
+Feed personalizado
+Deploy online
+🎯 Visão
 
 O objetivo a longo prazo do DevPlace é tornar-se mais do que uma simples rede social.
 
-A ideia é criar um **hub para developers**, onde seja possível:
+A ideia é criar um hub para developers, onde seja possível:
 
-> **Discover. Build. Share. Connect.**
+Discover. Build. Share. Connect.
 
 Um espaço onde programadores possam mostrar aquilo que estão a construir, encontrar pessoas com interesses semelhantes, aprender uns com os outros e criar uma comunidade centrada em tecnologia e desenvolvimento.
 
-## 📌 Estado atual
+📌 Estado atual
 
-**Prototype / Early Development**
+Prototype / Early Development
 
-O DevPlace está atualmente numa fase inicial de desenvolvimento. A versão presente demonstra a experiência e as funcionalidades principais da interface, enquanto a arquitetura de backend e funcionalidades sociais mais avançadas fazem parte da evolução futura do projeto.
+O DevPlace encontra-se atualmente numa fase inicial de desenvolvimento.
+
+A versão atual demonstra a experiência e as funcionalidades principais da interface, enquanto o backend e a base de dados estão a ser implementados progressivamente.
+
+Neste momento, o sistema de registo e login já está ligado à base de dados MariaDB, representando o início da transição do protótipo frontend para uma aplicação com backend.
+
+📄 Licença
+
+Este projeto ainda não possui uma licença definida.
+
+Agradecimentos,
+
+David M Pereira
+
+
+:contentReference[oaicite:1]{index=1}
+onde ta o agrecidimentos David M pereira
+
+gptonline.ai
+
+Está mesmo no final. No README que te mandei fica assim:
 
 ## 📄 Licença
 
 Este projeto ainda não possui uma licença definida.
 
+---
+
+Agradecimentos,
+
+**David M Pereira**
+
+Se queres exatamente como estava no teu README original, então usa simplesmente:
+
+## 📄 Licença
+
+Este projeto ainda não possui uma licença definida.
+
+Agradecimentos David M Pereira
+
+gptonline.ai
+
+mostra somente da parte da estrutura para bnaixo 
+
+gptonline.ai
+
+## 📁 Estrutura
+
+Text
+DevPlace/
+├── index.html
+├── style.css
+├── script.js
+├── logo.ico
+├── README.md
+│
+└── api/
+    ├── db.php
+    ├── register.php
+    └── login.php
+▶️ Executar localmente
+
+O projeto utiliza atualmente PHP, Apache e MariaDB para as funcionalidades de backend.
+
+1. Clonar o repositório
+git clone <repository-url>
+cd DevPlace
+2. Colocar o projeto no XAMPP
+
+Coloca a pasta DevPlace dentro de:
+
+C:\xampp\htdocs\
+3. Iniciar o XAMPP
+
+Inicia os serviços:
+
+Apache
+MySQL
+4. Criar a base de dados
+
+Cria uma base de dados chamada:
+
+devplace
+
+e configura a tabela users.
+
+5. Abrir a aplicação
+http://localhost/DevPlace/
+💾 Persistência de dados
+
+O projeto começou utilizando localStorage para armazenar os dados localmente no browser.
+
+Atualmente, o sistema de contas já utiliza uma base de dados MariaDB através de uma API PHP.
+
+O registo e o login são processados pelo backend e os dados dos utilizadores são armazenados na base de dados.
+
+A migração das restantes funcionalidades para o backend será feita progressivamente.
+
+🔐 Segurança
+
+As passwords dos utilizadores não são armazenadas diretamente.
+
+Durante o registo, as passwords são protegidas através de hashing utilizando:
+
+password_hash()
+
+Durante o login, a password é validada através de:
+
+password_verify()
+
+A comunicação com a base de dados utiliza PDO e prepared statements.
+
+O sistema de autenticação ainda se encontra em desenvolvimento e serão adicionadas mais medidas de segurança antes de uma possível utilização em produção.
+
+🧭 Roadmap
+
+O objetivo é evoluir progressivamente o DevPlace de um protótipo frontend para uma plataforma social completa.
+
+Backend
+Base de dados
+API REST
+Autenticação segura
+Sistema de sessões
+Sistema real de comentários
+Sistema de likes por utilizador
+Sistema de seguidores
+Perfis públicos
+Pesquisa de developers
+Projetos e portefólios
+Comunidades
+Notificações
+Mensagens privadas
+Sistema de hashtags
+Feed personalizado
+Deploy online
+🎯 Visão
+
+O objetivo a longo prazo do DevPlace é tornar-se mais do que uma simples rede social.
+
+A ideia é criar um hub para developers, onde seja possível:
+
+Discover. Build. Share. Connect.
+
+Um espaço onde programadores possam mostrar aquilo que estão a construir, encontrar pessoas com interesses semelhantes, aprender uns com os outros e criar uma comunidade centrada em tecnologia e desenvolvimento.
+
+📌 Estado atual
+
+Prototype / Early Development
+
+O DevPlace encontra-se atualmente numa fase inicial de desenvolvimento.
+
+A versão atual demonstra a experiência e as funcionalidades principais da interface, enquanto o backend e a base de dados estão a ser implementados progressivamente.
+
+Neste momento, o sistema de registo e login já está ligado à base de dados MariaDB, representando o início da transição do protótipo frontend para uma aplicação com backend.
+
+📄 Licença
+
+Este projeto ainda não possui uma licença definida.
 
 Agradecimentos David M Pereira
 
