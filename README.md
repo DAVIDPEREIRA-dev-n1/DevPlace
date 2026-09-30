@@ -80,7 +80,7 @@ Atualmente, o projeto utiliza tecnologias web nativas e uma stack backend em des
 
 ## 📁 Estrutura
 
-text
+
 DevPlace/
 
 ├── index.html
