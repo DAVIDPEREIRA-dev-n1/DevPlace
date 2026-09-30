@@ -97,9 +97,11 @@ DevPlace/
 
 └── api
 
-   ├── db.php
-   ├── register.php
-    ── login.php
+
+   
+   .     ├── db.php
+         ├── register.php
+           ── login.php
 
     ▶️ Executar localmente
 
