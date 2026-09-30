@@ -97,31 +97,6 @@ DevPlace/
 
 O projeto utiliza atualmente PHP, Apache e MariaDB para as funcionalidades de backend.
 
-1. Clonar o repositório
-git clone <repository-url>
-cd DevPlace
-2. Colocar o projeto no XAMPP
-
-Coloca a pasta DevPlace dentro de:
-
-C:\xampp\htdocs\
-3. Iniciar o XAMPP
-
-Inicia os serviços:
-
-Apache
-MySQL
-4. Criar a base de dados
-
-Cria uma base de dados chamada:
-
-devplace
-
-e configura a tabela users.
-
-5. Abrir a aplicação
-http://localhost/DevPlace/
-💾 Persistência de dados
 
 O projeto começou utilizando localStorage para armazenar os dados localmente no browser.
 
