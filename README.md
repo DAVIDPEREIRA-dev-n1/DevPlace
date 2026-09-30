@@ -82,12 +82,19 @@ Atualmente, o projeto utiliza tecnologias web nativas e uma stack backend em des
 
 text
 DevPlace/
+
 ├── index.html
+
 ├── style.css
+
 ├── script.js
+
 ├── logo.ico
+
 ├── README.md
+
 │
+
 └── api/
     ├── db.php
     ├── register.php
