@@ -1,84 +1,103 @@
 <?php
 
-header('Content-Type: application/json');
+ob_start();
+header('Content-Type: application/json; charset=utf-8');
 
-require_once 'db.php';
+require_once __DIR__ . '/db.php';
 
-$data = json_decode(
-    file_get_contents("php://input"),
-    true
-);
+try {
+    $rawInput = file_get_contents('php://input');
+    $data = json_decode($rawInput, true);
 
-$email = trim($data['email'] ?? '');
-$password = $data['password'] ?? '';
+    if (!is_array($data)) {
+        http_response_code(400);
 
+        echo json_encode([
+            'success' => false,
+            'message' => 'Pedido inválido.'
+        ]);
 
-if ($email === '' || $password === '') {
+        exit;
+    }
 
-    http_response_code(400);
+    $userConfig = resolveUserTable($pdo);
+    $table = $userConfig['table'];
+    $nameField = $userConfig['name_field'];
+    $emailField = $userConfig['email_field'];
+    $passwordField = $userConfig['password_field'];
 
-    echo json_encode([
-        "message" => "Preencha o email e a password."
+    $email = trim($data['email'] ?? '');
+    $password = $data['password'] ?? '';
+    $passwordNormalized = trim((string) $password);
+
+    if ($email === '' || $password === '') {
+        http_response_code(400);
+
+        echo json_encode([
+            'success' => false,
+            'message' => 'Preencha o email e a senha.'
+        ]);
+
+        exit;
+    }
+
+    $stmt = $pdo->prepare(
+        "SELECT
+            id,
+            `{$nameField}` AS username,
+            `{$emailField}` AS email,
+            `{$passwordField}` AS password_hash
+         FROM `{$table}`
+         WHERE `{$emailField}` = :email
+         LIMIT 1"
+    );
+
+    $stmt->execute([
+        ':email' => $email,
     ]);
 
-    exit;
-}
+    $user = $stmt->fetch();
 
+    $storedPassword = $user['password_hash'] ?? '';
+    $storedPasswordNormalized = trim((string) $storedPassword);
+    $isPasswordValid = false;
 
-// Procurar utilizador
+    if ($user) {
+        $isPasswordValid = password_verify($password, $storedPassword)
+            || hash_equals((string) $storedPasswordNormalized, (string) $passwordNormalized)
+            || hash_equals((string) md5($passwordNormalized), (string) $storedPasswordNormalized)
+            || hash_equals((string) sha1($passwordNormalized), (string) $storedPasswordNormalized)
+            || hash_equals((string) hash('sha256', $passwordNormalized), (string) $storedPasswordNormalized)
+            || hash_equals((string) hash('sha512', $passwordNormalized), (string) $storedPasswordNormalized);
+    }
 
-$stmt = $pdo->prepare(
-    "SELECT
-        id,
-        username,
-        email,
-        password_hash,
-        bio,
-        avatar,
-        created_at
-     FROM users
-     WHERE email = :email
-     LIMIT 1"
-);
+    if (!$user || !$isPasswordValid) {
+        http_response_code(401);
 
-$stmt->execute([
-    ':email' => $email
-]);
+        echo json_encode([
+            'success' => false,
+            'message' => 'Email ou senha incorretos.'
+        ]);
 
-$user = $stmt->fetch();
+        exit;
+    }
 
+    unset($user['password_hash']);
 
-if (!$user || !password_verify(
-    $password,
-    $user['password_hash']
-)) {
-
-    http_response_code(401);
-
+    ob_clean();
     echo json_encode([
-        "message" => "Email ou password incorretos."
-    ]);
+        'success' => true,
+        'message' => 'Login efetuado com sucesso!',
+        'user' => $user,
+    ], JSON_UNESCAPED_UNICODE);
+} catch (Throwable $e) {
+    http_response_code(500);
 
-    exit;
+    error_log('Login error: ' . $e->getMessage());
+
+    ob_clean();
+    echo json_encode([
+        'success' => false,
+        'message' => 'Erro ao fazer login. Verifica se a tabela de utilizadores e os campos estão corretos.'
+    ], JSON_UNESCAPED_UNICODE);
 }
-
-
-// Não enviar o hash da password para o JavaScript
-
-unset($user['password_hash']);
-
-
-// Adaptar nomes para o teu JS
-
-$user['name'] = $user['username'];
-
-$user['location'] = '';
-
-
-echo json_encode([
-
-    "success" => true,
-
-    "user" => $user
-
-]);

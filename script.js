@@ -72,11 +72,32 @@ async function apiRequest(endpoint, options = {}) {
             }
         });
 
-        const data = await response.json();
+        const text = await response.text();
+
+        console.log('Resposta do servidor:', text);
+
+        let data;
+
+        try {
+            data = JSON.parse(text);
+        } catch (error) {
+
+            console.error(
+                'O servidor não devolveu JSON:',
+                text
+            );
+
+            throw new Error(
+                'O servidor devolveu uma resposta inválida. ' +
+                'Vê a consola (F12) para descobrir o erro.'
+            );
+        }
 
         if (!response.ok) {
+
             throw new Error(
-                data.message || 'Ocorreu um erro no servidor.'
+                data.message ||
+                'Ocorreu um erro no servidor.'
             );
         }
 
@@ -113,53 +134,80 @@ async function handleLogin(e) {
 
     e.preventDefault();
 
-    const email =
-        document.getElementById('loginEmail').value.trim();
+    const email = document
+        .getElementById('loginEmail')
+        .value
+        .trim()
+        .toLowerCase();
 
-    const password =
-        document.getElementById('loginPassword').value;
+    const password = document
+        .getElementById('loginPassword')
+        .value;
 
     if (!email || !password) {
-
-        alert('Preencha todos os campos!');
-
+        alert('Preenche o email e a senha.');
         return;
     }
 
     try {
 
-        const data = await apiRequest('login.php', {
+        const response = await fetch('api/login.php', {
 
             method: 'POST',
+
+            headers: {
+                'Content-Type': 'application/json'
+            },
 
             body: JSON.stringify({
                 email: email,
                 password: password
             })
+
         });
 
-        // Guardar utilizador atual
-        currentUser = data.user;
+        const data = await response.json();
 
-        localStorage.setItem(
-            'currentUser',
-            JSON.stringify(currentUser)
-        );
+        if (!response.ok) {
 
-        // Limpar formulário
-        document
-            .getElementById('loginForm')
-            .reset();
+            alert(data.message || 'Erro ao fazer login.');
 
-        // Abrir feed
-        showFeed();
+            return;
+        }
+
+        if (data.success) {
+
+            currentUser = {
+                id: data.user.id,
+                name: data.user.username,
+                email: data.user.email,
+                password: password,
+                avatar: data.user.avatar || '👤',
+                bio: data.user.bio || ''
+            };
+
+            localStorage.setItem(
+                'currentUser',
+                JSON.stringify(currentUser)
+            );
+
+            showFeed();
+
+            document
+                .getElementById('loginForm')
+                .reset();
+        }
 
     } catch (error) {
 
-        alert(error.message);
+        console.error('Erro no login:', error);
+
+        alert(
+            'O servidor devolveu uma resposta inválida. ' +
+            'Vê a consola (F12) para descobrir o erro.'
+        );
     }
 }
-
 
 // ==================== REGISTO ====================
 
