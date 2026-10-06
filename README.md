@@ -2,7 +2,7 @@ DevPlace
 
 A social hub for developers.
 
-🌐 Live Demo: [d[evplacesite.netlify.app](https://devplace.site.je/)](https://devplace.site.je/)
+🌐 Live Demo: (https://devplace.site.je/)](https://devplace.site.je/)
 
 DevPlace é uma plataforma social criada para developers, com o objetivo de juntar programadores, projetos e conteúdo tecnológico num único espaço.
 
